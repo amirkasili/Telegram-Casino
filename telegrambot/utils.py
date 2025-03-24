@@ -78,6 +78,8 @@ def parse_positive_float(text: str) -> float:
 
 async def format_bets_history(user: User):
     bets = user.load_bets()
+    if len(bets) > 10:
+        bets = bets[10:]
     bet_history = []
     for bet in bets:
         if bet['type'] == 'ROULETTE':
