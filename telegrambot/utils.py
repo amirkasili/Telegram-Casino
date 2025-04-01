@@ -83,16 +83,23 @@ async def format_bets_history(user: User):
     bet_history = []
     for bet in bets:
         if bet['type'] == 'ROULETTE':
-            if 2 in bet['number']:
-                num_type = 'Evens'
-            else:
-                num_type = 'Odds'
+            numbers = bet.get('number', [])  
+            
+            # Ensure numbers is a list
+            if numbers is None:
+                numbers = []
+            elif isinstance(numbers, int):  
+                numbers = [numbers]  
+
+            num_type = 'Evens' if any(n % 2 == 0 for n in numbers) else 'Odds'
+            
             bet_history.append(
-                f"👑type : {bet['type']}\n"
-                f'🔴Color : {bet["color"]}\n'
-                f'🔢Number : {num_type}\n'
-                f'🤑Amount : {bet["amount"]}\n'
-                f'📊Status : {bet["status"]}')
+                f"👑 Type : {bet['type']}\n"
+                f"🔴 Color : {bet.get('color', 'N/A')}\n"
+                f"🔢 Number : {num_type}\n"
+                f"🤑 Amount : {bet['amount']}\n"
+                f"📊 Status : {bet['status']}"
+            )
         elif bet['type'] == 'LIMBO':
             bet_history.append(
                 f"👑type : {bet['type']}\n"
